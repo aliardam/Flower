@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cassert>
 using namespace std;
-
+//my base class
 class flower{
     int fertneed;
     bool fertilized=false;
@@ -13,9 +13,24 @@ class flower{
         if (waterneed<=wateramount)
         {
             wateramount -=waterneed;
-            cout<<"your flower has been watered";
+            cout<<"Congrats! your flower has been watered !! ";
             watered=true;
         }
+        else{
+            cout<<"not enough water :,(";
+        }
+    } 
+    void fertilize (int &fertamount){
+              if (fertneed<=fertamount)
+        {
+            fertamount-=fertneed;
+            cout<<"Congrats! your flower has been fertilized !! ";
+            fertilized=true;
+        }
+        else{
+            cout<<"not enough fertilizer  :,(";
+        }
+    } 
     } 
 };
 
