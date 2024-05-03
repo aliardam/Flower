@@ -31,8 +31,22 @@ class flower{
             cout<<"not enough fertilizer  :,(";
         }
     } 
-    } 
-};
+    bool checkcondition(){
+        if (watered || fertilized)
+        condition=true;
+        else
+        condition=false;
+        return condition;
+    }
+    virtual ~flower() {}
+    };
+
+    class rose : public flower {
+        int fertneed=10;
+        int waterneed=15;
+
+    };
+
 
 
 // my humble tests
