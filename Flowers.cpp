@@ -55,10 +55,12 @@ void TEST ()
     flower* testflower = new rose();
     int wateramount = 0;
     int fertamount = 20;
+    testflower->setcolor(red);
     testflower->fertilize(fertamount);
     testflower->water(wateramount);
     bool con = testflower->checkcondition();
     assert(!con);
+    assert(getcolor==red);
 }
 
 
