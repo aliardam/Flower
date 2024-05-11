@@ -63,6 +63,7 @@ class flower{
         string color;
         int fertneed=10;
         int waterneed=15;
+        bool dethorned = false;
         public:
         void setcolor (const string& colorname) override
         {
@@ -80,6 +81,10 @@ class flower{
         }
         string const getcolor() override {
             return color;
+        }
+        void dethorn(){
+            dethorned=true;
+            cout<<"your flower has been de-thorned"<<endl;
         }
 
     };
