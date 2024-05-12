@@ -86,6 +86,29 @@ class flower{
             cout<<"your flower has been de-thorned"<<endl;
         }
     };
+class daisy : public flower {
+            string color;
+        int fertneed=8;
+        int waterneed=10;
+        public:
+        void setcolor (const string& colorname) override
+        {
+            vector<string> possiblecolors = {"white", "pink", "yellow", "red", "lavender", "purple"};
+            string colorname_;
+            colorname_ = decapitalize(colorname);
+            for (int i=0;i<possiblecolors.size();i +=1){
+                if (colorname_ == possiblecolors[i]) {
+                color = colorname_;
+                return;
+            }
+            }
+             cout << "input invalid, or the color is not a natural accuring color of this flower. " << endl;
+        color = "unknown"; // set default color
+        }
+        string const getcolor() override {
+            return color;
+        }
+        };
 
 // my humble tests
 void TEST ()
@@ -102,6 +125,9 @@ void TEST ()
     assert(testflower->getcolor()=="red");
     flower* testflower2 = new daisy();
     flower* testflower3 = new daisy();
+    testflower2->setcolor("White");
+    assert(testflower2->getcolor()=="white");
+    assert(!testflower2->checkcondition())
     pollinator pollinatorA("insect");
     pollinator pollinatorB("bird");
     pollinatorA.take_pollen(testflower2);
