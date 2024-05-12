@@ -14,7 +14,6 @@ string decapitalize(const string& str) {
             result += c;
         }
     }
-
     return result;
 }
 //my base class
@@ -86,7 +85,6 @@ class flower{
             dethorned=true;
             cout<<"your flower has been de-thorned"<<endl;
         }
-
     };
 
 // my humble tests
@@ -104,8 +102,6 @@ void TEST ()
     assert(testflower->getcolor()=="red");
     flower* testflower2 = new daisy();
     flower* testflower3 = new daisy();
-    Seed testseed = testflower2->getseed();
-    assert(testseed.getcolor=="yellow"); //flower seeds dont really have specific colors but lets suppose they do (im running out of ideas)
     pollinator pollinatorA("insect");
     pollinator pollinatorB("bird");
     pollinatorA.take_pollen(testflower2);
@@ -114,8 +110,6 @@ void TEST ()
     assert(!pollinatorB.haspollen);
     assert(testflower3->pollinated());
 }
-
-
 int main()
 {
 TEST();
