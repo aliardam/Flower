@@ -16,6 +16,29 @@ string decapitalize(const string& str) {
     }
     return result;
 }
+class pollinator 
+{
+ string _type;
+ bool has_pollen;
+ public:
+ pollinator(string typeX){ settype(typeX); };
+ void const settype (string _inputtype){
+     vector<string> possibletypes = {"insect","bird","bat","wind"};
+    string typeY;
+            typeY = decapitalize(_inputtype);
+            for (int i=0;i<possibletypes.size();i +=1){
+                if (typeY == possibletypes[i]) {
+                _type = typeY;
+            }
+            else{
+                throw invalid_argument("invalid pollinator type");
+            }
+}
+}
+string const gettype(){
+    return _type;
+}
+};
 //my base class
 class flower{
     int fertneed;
@@ -32,7 +55,7 @@ class flower{
             watered=true;
         }
         else{
-            cout<<"not enough water :,("<<endl;
+            throw invalid_argument("not enough water :,(");
         }
     } 
     void fertilize (int &fertamount){
@@ -43,7 +66,7 @@ class flower{
             fertilized=true;
         }
         else{
-            cout<<"not enough fertilizer  :,("<<endl;
+            throw invalid_argument("not enough fertilizer  :,(");
         }
     } 
     bool checkcondition(){
@@ -60,10 +83,12 @@ class flower{
 
     class rose : public flower {
         string color;
-        int fertneed=10;
-        int waterneed=15;
-        bool dethorned = false;
+        int const fertneed=10;
+        int const waterneed=15;
+        bool dethorned = false; //roses have thorns so yea.
         public:
+        rose(){};
+        rose(string _color){setcolor(_color);};
         void setcolor (const string& colorname) override
         {
             vector<string> possiblecolors = {"red", "pink", "white","yellow","orange","peach","purple"};
@@ -88,9 +113,11 @@ class flower{
     };
 class daisy : public flower {
             string color;
-        int fertneed=8;
-        int waterneed=10;
+        int const fertneed=8;
+        int const waterneed=10;
         public:
+        daisy(){};
+        daisy(string _color){setcolor(_color);};
         void setcolor (const string& colorname) override
         {
             vector<string> possiblecolors = {"white", "pink", "yellow", "red", "lavender", "purple"};
@@ -127,7 +154,7 @@ void TEST ()
     flower* testflower3 = new daisy();
     testflower2->setcolor("White");
     assert(testflower2->getcolor()=="white");
-    assert(!testflower2->checkcondition())
+    assert(!testflower2->checkcondition());
     pollinator pollinatorA("insect");
     pollinator pollinatorB("bird");
     pollinatorA.take_pollen(testflower2);
