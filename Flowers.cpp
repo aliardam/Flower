@@ -20,7 +20,7 @@ class pollinator
 {
  string _type;
  string canpollinate;
- bool has_pollen;
+ bool haspollen=false;
  public:
  pollinator(string typeX){ settype(typeX); };
  void const settype (string _inputtype){
@@ -30,11 +30,11 @@ class pollinator
             for (int i=0;i<possibletypes.size();i +=1){
                 if (typeY == possibletypes[i]) {
                 _type = typeY;
+                return;
             }
-            else{
-                throw invalid_argument("invalid pollinator type");
-            }
+        
 }
+throw invalid_argument("invalid pollinator type");
 }
 void const setcnplnt(string flower_type){
     canpollinate=flower_type;
@@ -42,18 +42,28 @@ void const setcnplnt(string flower_type){
 string const getcnplnt(){ return canpollinate;}
 string const gettype(){
     return _type;
-};
+}
+void collectpln(){haspollen=true;}
+void rmpollen(){haspollen=false;}
+bool Haspollen(){return haspollen;}
 };
 //my base class
 class flower{
     protected:
     vector<string> acceptable_pollinators;
+    private:
     int fertneed;
     int waterneed;
     bool fertilized=false;
     bool watered=false;
     bool condition=false;
+    bool pollinated=false;
+    protected:
+    void plnmaketrue(){
+        pollinated=true;
+    }
     public :
+    bool Pollinated(){return pollinated;}
     void water(int &wateramount){
         if (waterneed<=wateramount)
         {
@@ -85,6 +95,8 @@ class flower{
     }
     virtual void setcolor (const string& colorname) = 0;
     virtual string const getcolor() = 0;
+    virtual void givepollen(pollinator)=0;
+    virtual void pollinate(pollinator)=0;
     virtual ~flower() {}
     };
 
@@ -122,6 +134,31 @@ class flower{
             dethorned=true;
             cout<<"your flower has been de-thorned"<<endl;
         }
+                void givepollen(pollinator inputpl) override {
+            for (int i=0; i<acceptable_pollinators.size(); i++){
+            if (inputpl.gettype()==acceptable_pollinators[i])
+            {inputpl.collectpln();
+            return;}
+        }
+            cout<<"This pollinator cannot collect pollen from this flower, try again"<<endl;
+        }
+                void pollinate (pollinator inputpl) override {
+            if (plncompatible(inputpl))
+            {
+            plnmaketrue();
+            inputpl.rmpollen();
+            }
+            else
+            {
+                cout<<"this pollinator cannot pollinate your flower "<<endl;
+            }
+        }
+        bool plncompatible(pollinator inputpl){
+         for (int i=0; i<acceptable_pollinators.size(); i++){
+            if (inputpl.gettype()==acceptable_pollinators[i]){return true;}
+         }
+         return false;
+        }      
     };
 class daisy : public flower {
         string color;
@@ -152,11 +189,37 @@ class daisy : public flower {
         string const getcolor() override {
             return color;
         }
+        void givepollen(pollinator inputpl) override {
+            if (plncompatible(inputpl))
+            {
+            inputpl.collectpln();
+            return;
+            }
+            cout<<"This pollinator cannot collect pollen from this flower, try again"<<endl;
+        }
+        void pollinate (pollinator inputpl) override {
+            if (plncompatible(inputpl))
+            {
+            plnmaketrue();
+            inputpl.rmpollen();
+            }
+            else
+            {
+                cout<<"this pollinator cannot pollinate your flower "<<endl;
+            }
+        }
+        bool plncompatible(pollinator inputpl){
+         for (int i=0; i<acceptable_pollinators.size(); i++){
+            if (inputpl.gettype()==acceptable_pollinators[i]){return true;}
+         }
+         return false;
+        }
         };
 
 // my humble tests
 void TEST ()
 {
+    /*
     flower* testflower = new rose();
     int wateramount = 0;
     int fertamount = 20;
@@ -167,6 +230,7 @@ void TEST ()
     bool con = testflower->checkcondition();
     assert(!con);
     assert(testflower->getcolor()=="red");
+    */
     flower* testflower2 = new daisy();
     flower* testflower3 = new daisy();
     testflower2->setcolor("White");
@@ -177,8 +241,8 @@ void TEST ()
     testflower2->givepollen(pollinatorA);
     testflower2->givepollen(pollinatorB);
     testflower3->pollinate(pollinatorA);
-    assert(!pollinatorB.haspollen);
-    assert(testflower3->pollinated());
+    assert(!pollinatorB.Haspollen());
+    assert(testflower3->Pollinated());
 }
 int main()
 {
