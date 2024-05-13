@@ -19,6 +19,7 @@ string decapitalize(const string& str) {
 class pollinator 
 {
  string _type;
+ string canpollinate;
  bool has_pollen;
  public:
  pollinator(string typeX){ settype(typeX); };
@@ -35,15 +36,21 @@ class pollinator
             }
 }
 }
+void const setcnplnt(string flower_type){
+    canpollinate=flower_type;
+}
+string const getcnplnt(){ return canpollinate;}
 string const gettype(){
     return _type;
-}
+};
 };
 //my base class
 class flower{
+    protected:
+    vector<string> acceptable_pollinators;
     int fertneed;
-    bool fertilized=false;
     int waterneed;
+    bool fertilized=false;
     bool watered=false;
     bool condition=false;
     public :
@@ -87,8 +94,13 @@ class flower{
         int const waterneed=15;
         bool dethorned = false; //roses have thorns so yea.
         public:
-        rose(){};
-        rose(string _color){setcolor(_color);};
+        rose() {
+        acceptable_pollinators = {"insect"};
+    };
+        rose(string _color){
+            setcolor(_color);
+            acceptable_pollinators = {"insect"};
+        }; 
         void setcolor (const string& colorname) override
         {
             vector<string> possiblecolors = {"red", "pink", "white","yellow","orange","peach","purple"};
@@ -112,12 +124,17 @@ class flower{
         }
     };
 class daisy : public flower {
-            string color;
+        string color;
         int const fertneed=8;
         int const waterneed=10;
         public:
-        daisy(){};
-        daisy(string _color){setcolor(_color);};
+        daisy() {
+        acceptable_pollinators = {"insect"};
+    };
+        daisy(string _color){
+            setcolor(_color);
+            acceptable_pollinators = {"insect"};
+        };
         void setcolor (const string& colorname) override
         {
             vector<string> possiblecolors = {"white", "pink", "yellow", "red", "lavender", "purple"};
@@ -157,8 +174,8 @@ void TEST ()
     assert(!testflower2->checkcondition());
     pollinator pollinatorA("insect");
     pollinator pollinatorB("bird");
-    pollinatorA.take_pollen(testflower2);
-    pollinatorB.take_pollen(testflower2);
+    testflower2->givepollen(pollinatorA);
+    testflower2->givepollen(pollinatorB);
     testflower3->pollinate(pollinatorA);
     assert(!pollinatorB.haspollen);
     assert(testflower3->pollinated());
