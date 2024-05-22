@@ -95,8 +95,9 @@ class flower{
     }
     virtual void setcolor (const string& colorname) = 0;
     virtual string const getcolor() = 0;
-    virtual void givepollen(pollinator)=0;
+    virtual void givepollen(pollinator&)=0;
     virtual void pollinate(pollinator)=0;
+    virtual bool dethornned() { return false; } // default implementation
     virtual ~flower() {}
     };
 
@@ -134,7 +135,7 @@ class flower{
             dethorned=true;
             cout<<"your flower has been de-thorned"<<endl;
         }
-                void givepollen(pollinator inputpl) override {
+                void givepollen(pollinator& inputpl) override {
             for (int i=0; i<acceptable_pollinators.size(); i++){
             if (inputpl.gettype()==acceptable_pollinators[i])
             {inputpl.collectpln();
@@ -158,7 +159,10 @@ class flower{
             if (inputpl.gettype()==acceptable_pollinators[i]){return true;}
          }
          return false;
-        }      
+        } 
+        bool dethornned () override {
+            return dethorned;
+        }
     };
 class daisy : public flower {
         string color;
@@ -189,7 +193,7 @@ class daisy : public flower {
         string const getcolor() override {
             return color;
         }
-        void givepollen(pollinator inputpl) override {
+        void givepollen(pollinator& inputpl) override {
             if (plncompatible(inputpl))
             {
             inputpl.collectpln();
@@ -216,36 +220,97 @@ class daisy : public flower {
         }
         };
 
-// my humble tests
-void TEST ()
-{
-    /*
-    flower* testflower = new rose();
-    int wateramount = 0;
-    int fertamount = 20;
-    string colorname = "Red";
-    testflower->setcolor(colorname);
-    testflower->fertilize(fertamount);
-    testflower->water(wateramount);
-    bool con = testflower->checkcondition();
-    assert(!con);
-    assert(testflower->getcolor()=="red");
-    */
-    flower* testflower2 = new daisy();
-    flower* testflower3 = new daisy();
-    testflower2->setcolor("White");
-    assert(testflower2->getcolor()=="white");
-    assert(!testflower2->checkcondition());
+// my not so humble tests
+void testPollinatorType() {
     pollinator pollinatorA("insect");
     pollinator pollinatorB("bird");
-    testflower2->givepollen(pollinatorA);
-    testflower2->givepollen(pollinatorB);
-    testflower3->pollinate(pollinatorA);
-    assert(!pollinatorB.Haspollen());
-    assert(testflower3->Pollinated());
+    assert(pollinatorA.gettype() == "insect");
+    assert(pollinatorB.gettype() == "bird");
 }
-int main()
-{
-TEST();
-return 0;
+
+void testPollinatorPollenCollection() {
+    pollinator pollinatorA("insect");
+    flower* testflower = new rose();
+    testflower->givepollen(pollinatorA);
+    assert(pollinatorA.Haspollen());
+}
+
+void testRoseColor() {
+    flower* testflower = new rose("Red");
+    assert(testflower->getcolor() == "red");
+    testflower = new rose("InvalidColor");
+    assert(testflower->getcolor() == "unknown");
+}
+
+void testDaisyColor() {
+    flower* testflower = new daisy("White");
+    assert(testflower->getcolor() == "white");
+    testflower = new daisy("InvalidColor");
+    assert(testflower->getcolor() == "unknown");
+}
+
+void testRoseFertilization() {
+    flower* testflower = new rose();
+    int fertamount = 20;
+    testflower->fertilize(fertamount);
+    assert(testflower->checkcondition());
+}
+
+void testDaisyFertilization() {
+    flower* testflower = new daisy();
+    int fertamount = 20;
+    testflower->fertilize(fertamount);
+    assert(testflower->checkcondition());
+}
+
+void testRoseWatering() {
+    flower* testflower = new rose();
+    int wateramount = 20;
+    testflower->water(wateramount);
+    assert(testflower->checkcondition());
+}
+
+void testDaisyWatering() {
+    flower* testflower = new daisy();
+    int wateramount = 20;
+    testflower->water(wateramount);
+    assert(testflower->checkcondition());
+}
+
+void testRosePollination() {
+    flower* testflower = new rose();
+    pollinator pollinatorA("insect");
+    testflower->givepollen(pollinatorA);
+    testflower->pollinate(pollinatorA);
+    assert(testflower->Pollinated());
+}
+
+void testDaisyPollination() {
+    flower* testflower = new daisy();
+    pollinator pollinatorA("insect");
+    testflower->givepollen(pollinatorA);
+    testflower->pollinate(pollinatorA);
+    assert(testflower->Pollinated());
+}
+
+void testRoseDeThorning() {
+    rose* testrose = new rose();
+    assert(testrose->dethornned() == false);
+    testrose->dethorn();
+    assert(testrose->dethornned());//sorry for this horrible mess im running out of words
+}
+
+int main() {
+    testPollinatorType();
+    testPollinatorPollenCollection();
+    testRoseColor();
+    testDaisyColor();
+    testRoseFertilization();
+    testDaisyFertilization();
+    testRoseWatering();
+    testDaisyWatering();
+    testRosePollination();
+    testDaisyPollination();
+    testRoseDeThorning();
+    return 0;
 }
