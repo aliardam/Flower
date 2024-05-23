@@ -51,6 +51,8 @@ bool Haspollen(){return haspollen;}
 class flower{
     protected:
     vector<string> acceptable_pollinators;
+    vector<string> possiblecolors;
+    string color;
     int fertneed;
     int waterneed;
     bool fertilized=false;
@@ -91,8 +93,20 @@ class flower{
         condition=false;
         return condition;
     }
-    virtual void setcolor (string& colorname) = 0;
-    virtual string const getcolor() = 0;
+    void setcolor (string& colorname)
+    {
+        string colorname_;
+        colorname_ = decapitalize(colorname);
+        for (int i=0;i<possiblecolors.size();i +=1){
+            if (colorname_ == possiblecolors[i]) {
+            color = colorname_;
+            return;
+        }
+        }
+         cout << "input invalid, or the color is not a natural accuring color of this flower. " << endl;
+        color = "unknown"; // set default color
+    }
+    string const getcolor() { return color;}
     virtual void givepollen(pollinator&)=0;
     virtual void pollinate(pollinator)=0;
     virtual void dethorn() {throw invalid_argument("this flower doesnt have thorns");}
@@ -103,37 +117,22 @@ class flower{
     };
 
  class rose : public flower {
-        string color;
         bool dethorned = false; //roses have thorns so yea.
         public:
         rose() {
+        possiblecolors = {"red", "pink", "white","yellow","orange","peach","purple"};
         acceptable_pollinators = {"insect"};
         fertneed=10;
         waterneed=15;
+        possiblecolors = {"red", "pink", "white","yellow","orange","peach","purple"};
     };
         rose(string _color){
+             possiblecolors = {"red", "pink", "white","yellow","orange","peach","purple"};
             setcolor(_color);
             acceptable_pollinators = {"insect"};
             fertneed=10;
             waterneed=15;
-        }; 
-        void setcolor ( string& colorname) override
-        {
-            vector<string> possiblecolors = {"red", "pink", "white","yellow","orange","peach","purple"};
-            string colorname_;
-            colorname_ = decapitalize(colorname);
-            for (int i=0;i<possiblecolors.size();i +=1){
-                if (colorname_ == possiblecolors[i]) {
-                color = colorname_;
-                return;
-            }
-            }
-             cout << "input invalid, or the color is not a natural accuring color of this flower. " << endl;
-        color = "unknown"; // set default color
-        }
-        string const getcolor() override {
-            return color;
-        }
+            }; 
         void dethorn()override{
             dethorned=true;
             cout<<"your flower has been de-thorned"<<endl;
@@ -168,38 +167,22 @@ class flower{
         }
     };
 class daisy : public flower {
-        string color;
         int fertneed=8;
         int waterneed=10;
         public:
         daisy() {
+        possiblecolors = {"white", "pink", "yellow", "red", "lavender", "purple"};
         acceptable_pollinators = {"insect"};
         fertneed=8;
         waterneed=10;
     };
         daisy(string _color){
+        possiblecolors = {"white", "pink", "yellow", "red", "lavender", "purple"};
         setcolor(_color);
         acceptable_pollinators = {"insect"};
         fertneed=8;
         waterneed=10;
         };
-        void setcolor (string& colorname) override
-        {
-            vector<string> possiblecolors = {"white", "pink", "yellow", "red", "lavender", "purple"};
-            string colorname_;
-            colorname_ = decapitalize(colorname);
-            for (int i=0;i<possiblecolors.size();i +=1){
-                if (colorname_ == possiblecolors[i]) {
-                color = colorname_;
-                return;
-            }
-            }
-             cout << "input invalid, or the color is not a natural accuring color of this flower. " << endl;
-        color = "unknown"; // set default color
-        }
-        string const getcolor() override {
-            return color;
-        }
         void givepollen(pollinator& inputpl) override {
             if (plncompatible(inputpl))
             {
@@ -227,37 +210,21 @@ class daisy : public flower {
         }
         };
 class sage : public flower {
-    string color;
     bool pruned = false;
     public:
     sage() {
-        acceptable_pollinators = {"bird", "insect"};
+    possiblecolors = {"blue", "purple", "red", "pink", "white", "yellow", "orange"};
+    acceptable_pollinators = {"bird", "insect"};
     fertneed=1;
     waterneed=2;
     };
     sage(string _color){
+        possiblecolors = {"blue", "purple", "red", "pink", "white", "yellow", "orange"};
         setcolor(_color);
         acceptable_pollinators = {"bird", "insect"};
         fertneed=1;
         waterneed=2;
     }; 
-    void setcolor (string& colorname) override
-    {
-        vector<string> possiblecolors = {"blue", "purple", "white", "pink"};
-        string colorname_;
-        colorname_ = decapitalize(colorname);
-        for (int i=0;i<possiblecolors.size();i +=1){
-            if (colorname_ == possiblecolors[i]) {
-            color = colorname_;
-            return;
-        }
-        }
-         cout << "input invalid, or the color is not a natural accuring color of this flower. " << endl;
-        color = "unknown"; // set default color
-    }
-    string const getcolor() override {
-        return color;
-    }
     void givepollen(pollinator& inputpl) override {
         if (plncompatible(inputpl))
         {
@@ -335,7 +302,7 @@ void testRoseFertilization() {
 
 void testDaisyFertilization() {
     flower* testflower = new daisy();
-    int fertamount = 2;
+    int fertamount = 20;
     testflower->fertilize(fertamount);
     assert(testflower->checkcondition());
 }
