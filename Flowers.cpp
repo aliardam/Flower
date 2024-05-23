@@ -51,14 +51,12 @@ bool Haspollen(){return haspollen;}
 class flower{
     protected:
     vector<string> acceptable_pollinators;
-    private:
     int fertneed;
     int waterneed;
     bool fertilized=false;
     bool watered=false;
     bool condition=false;
     bool pollinated=false;
-    protected:
     void plnmaketrue(){
         pollinated=true;
     }
@@ -93,31 +91,33 @@ class flower{
         condition=false;
         return condition;
     }
-    virtual void setcolor (const string& colorname) = 0;
+    virtual void setcolor (string& colorname) = 0;
     virtual string const getcolor() = 0;
     virtual void givepollen(pollinator&)=0;
     virtual void pollinate(pollinator)=0;
     virtual void dethorn() {throw invalid_argument("this flower doesnt have thorns");}
     virtual bool dethornned() { return false; } // default implementation
-    virtual void prune(){throw invalid_argument("this flower doesnt need pruning");}
+    virtual void prune(){};
     virtual bool is_pruned(){return false;}// default implementation
     virtual ~flower() {}
     };
 
  class rose : public flower {
         string color;
-        int const fertneed=10;
-        int const waterneed=15;
         bool dethorned = false; //roses have thorns so yea.
         public:
         rose() {
         acceptable_pollinators = {"insect"};
+        fertneed=10;
+        waterneed=15;
     };
         rose(string _color){
             setcolor(_color);
             acceptable_pollinators = {"insect"};
+            fertneed=10;
+            waterneed=15;
         }; 
-        void setcolor (const string& colorname) override
+        void setcolor ( string& colorname) override
         {
             vector<string> possiblecolors = {"red", "pink", "white","yellow","orange","peach","purple"};
             string colorname_;
@@ -169,17 +169,21 @@ class flower{
     };
 class daisy : public flower {
         string color;
-        int const fertneed=8;
-        int const waterneed=10;
+        int fertneed=8;
+        int waterneed=10;
         public:
         daisy() {
         acceptable_pollinators = {"insect"};
+        fertneed=8;
+        waterneed=10;
     };
         daisy(string _color){
-            setcolor(_color);
-            acceptable_pollinators = {"insect"};
+        setcolor(_color);
+        acceptable_pollinators = {"insect"};
+        fertneed=8;
+        waterneed=10;
         };
-        void setcolor (const string& colorname) override
+        void setcolor (string& colorname) override
         {
             vector<string> possiblecolors = {"white", "pink", "yellow", "red", "lavender", "purple"};
             string colorname_;
@@ -224,18 +228,20 @@ class daisy : public flower {
         };
 class sage : public flower {
     string color;
-    int const fertneed=1;
-    int const waterneed=2;
     bool pruned = false;
     public:
     sage() {
         acceptable_pollinators = {"bird", "insect"};
+    fertneed=1;
+    waterneed=2;
     };
     sage(string _color){
         setcolor(_color);
         acceptable_pollinators = {"bird", "insect"};
+        fertneed=1;
+        waterneed=2;
     }; 
-    void setcolor (const string& colorname) override
+    void setcolor (string& colorname) override
     {
         vector<string> possiblecolors = {"blue", "purple", "white", "pink"};
         string colorname_;
@@ -329,7 +335,7 @@ void testRoseFertilization() {
 
 void testDaisyFertilization() {
     flower* testflower = new daisy();
-    int fertamount = 20;
+    int fertamount = 2;
     testflower->fertilize(fertamount);
     assert(testflower->checkcondition());
 }
