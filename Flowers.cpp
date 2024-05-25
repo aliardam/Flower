@@ -68,6 +68,7 @@ class flower{
         if (waterneed<=wateramount)
         {
             wateramount -=waterneed;
+            waterneed=0;
             cout<<"Congrats! your flower has been watered !! "<<endl;
             watered=true;
         }
@@ -76,9 +77,10 @@ class flower{
         }
     } 
     void fertilize (int &fertamount){
-              if (fertneed<=fertamount)
+            if (fertneed<=fertamount)
         {
             fertamount-=fertneed;
+            fertneed = 0;
             cout<<"Congrats! your flower has been fertilized !! "<<endl;
             fertilized=true;
         }
@@ -106,9 +108,31 @@ class flower{
          cout << "input invalid, or the color is not a natural accuring color of this flower. " << endl;
         color = "unknown"; // set default color
     }
+        void givepollen(pollinator& inputpl) {
+        if (plncompatible(inputpl))
+        {
+        inputpl.collectpln();
+        return;
+        }
+        cout<<"This pollinator cannot collect pollen from this flower, try again"<<endl;
+    }
+    void pollinate (pollinator inputpl) {
+        if (plncompatible(inputpl))
+        {
+        plnmaketrue();
+        inputpl.rmpollen();
+        }
+        else
+        {
+            cout<<"this pollinator cannot pollinate your flower "<<endl;
+        }
+    }
+    bool plncompatible(pollinator inputpl){
+     for (int i=0; i<acceptable_pollinators.size(); i++){
+        if (inputpl.gettype()==acceptable_pollinators[i]){return true;}
+     }
+     return false;}
     string const getcolor() { return color;}
-    virtual void givepollen(pollinator&)=0;
-    virtual void pollinate(pollinator)=0;
     virtual void dethorn() {throw invalid_argument("this flower doesnt have thorns");}
     virtual bool dethornned() { return false; } // default implementation
     virtual void prune(){};
@@ -137,31 +161,6 @@ class flower{
             dethorned=true;
             cout<<"your flower has been de-thorned"<<endl;
         }
-                void givepollen(pollinator& inputpl) override {
-            for (int i=0; i<acceptable_pollinators.size(); i++){
-            if (inputpl.gettype()==acceptable_pollinators[i])
-            {inputpl.collectpln();
-            return;}
-        }
-            cout<<"This pollinator cannot collect pollen from this flower, try again"<<endl;
-        }
-                void pollinate (pollinator inputpl) override {
-            if (plncompatible(inputpl))
-            {
-            plnmaketrue();
-            inputpl.rmpollen();
-            }
-            else
-            {
-                cout<<"this pollinator cannot pollinate your flower "<<endl;
-            }
-        }
-        bool plncompatible(pollinator inputpl){
-         for (int i=0; i<acceptable_pollinators.size(); i++){
-            if (inputpl.gettype()==acceptable_pollinators[i]){return true;}
-         }
-         return false;
-        } 
         bool dethornned () override {
             return dethorned;
         }
@@ -182,33 +181,8 @@ class daisy : public flower {
         acceptable_pollinators = {"insect"};
         fertneed=8;
         waterneed=10;
-        };
-        void givepollen(pollinator& inputpl) override {
-            if (plncompatible(inputpl))
-            {
-            inputpl.collectpln();
-            return;
-            }
-            cout<<"This pollinator cannot collect pollen from this flower, try again"<<endl;
-        }
-        void pollinate (pollinator inputpl) override {
-            if (plncompatible(inputpl))
-            {
-            plnmaketrue();
-            inputpl.rmpollen();
-            }
-            else
-            {
-                cout<<"this pollinator cannot pollinate your flower "<<endl;
-            }
-        }
-        bool plncompatible(pollinator inputpl){
-         for (int i=0; i<acceptable_pollinators.size(); i++){
-            if (inputpl.gettype()==acceptable_pollinators[i]){return true;}
-         }
-         return false;
-        }
-        };
+}
+};
 class sage : public flower {
     bool pruned = false;
     public:
@@ -225,31 +199,6 @@ class sage : public flower {
         fertneed=1;
         waterneed=2;
     }; 
-    void givepollen(pollinator& inputpl) override {
-        if (plncompatible(inputpl))
-        {
-        inputpl.collectpln();
-        return;
-        }
-        cout<<"This pollinator cannot collect pollen from this flower, try again"<<endl;
-    }
-    void pollinate (pollinator inputpl) override {
-        if (plncompatible(inputpl))
-        {
-        plnmaketrue();
-        inputpl.rmpollen();
-        }
-        else
-        {
-            cout<<"this pollinator cannot pollinate your flower "<<endl;
-        }
-    }
-    bool plncompatible(pollinator inputpl){
-     for (int i=0; i<acceptable_pollinators.size(); i++){
-        if (inputpl.gettype()==acceptable_pollinators[i]){return true;}
-     }
-     return false;}
-
      void prune() {
         if (is_pruned()) {
             cout << "This sage plant has already been pruned." << endl;
@@ -284,6 +233,7 @@ void testRoseColor() {
     assert(testflower->getcolor() == "red");
     testflower = new rose("InvalidColor");
     assert(testflower->getcolor() == "unknown");
+    delete testflower;
 }
 
 void testDaisyColor() {
@@ -291,6 +241,7 @@ void testDaisyColor() {
     assert(testflower->getcolor() == "white");
     testflower = new daisy("InvalidColor");
     assert(testflower->getcolor() == "unknown");
+    delete testflower;
 }
 
 void testRoseFertilization() {
@@ -298,6 +249,7 @@ void testRoseFertilization() {
     int fertamount = 20;
     testflower->fertilize(fertamount);
     assert(testflower->checkcondition());
+    delete testflower;
 }
 
 void testDaisyFertilization() {
@@ -305,6 +257,7 @@ void testDaisyFertilization() {
     int fertamount = 20;
     testflower->fertilize(fertamount);
     assert(testflower->checkcondition());
+    delete testflower;
 }
 
 void testRoseWatering() {
@@ -312,6 +265,7 @@ void testRoseWatering() {
     int wateramount = 20;
     testflower->water(wateramount);
     assert(testflower->checkcondition());
+    delete testflower;
 }
 
 void testDaisyWatering() {
@@ -319,6 +273,7 @@ void testDaisyWatering() {
     int wateramount = 20;
     testflower->water(wateramount);
     assert(testflower->checkcondition());
+    delete testflower;
 }
 
 void testRosePollination() {
@@ -327,6 +282,7 @@ void testRosePollination() {
     testflower->givepollen(pollinatorA);
     testflower->pollinate(pollinatorA);
     assert(testflower->Pollinated());
+    delete testflower;
 }
 
 void testDaisyPollination() {
@@ -335,6 +291,7 @@ void testDaisyPollination() {
     testflower->givepollen(pollinatorA);
     testflower->pollinate(pollinatorA);
     assert(testflower->Pollinated());
+    delete testflower;
 }
 
 void testRoseDeThorning() {
@@ -342,6 +299,7 @@ void testRoseDeThorning() {
     assert(testrose->dethornned() == false);
     testrose->dethorn();
     assert(testrose->dethornned());//sorry for this horrible mess im running out of words
+    delete testrose;
 }
 
 void testSagePollinatorPollenCollection() {
@@ -349,6 +307,7 @@ void testSagePollinatorPollenCollection() {
     flower* testflower = new sage();
     testflower->givepollen(pollinatorA);
     assert(pollinatorA.Haspollen());
+    delete testflower;
 }
 
 void testSageColor() {
@@ -356,6 +315,7 @@ void testSageColor() {
     assert(testflower->getcolor() == "blue");
     testflower = new sage("InvalidColor");
     assert(testflower->getcolor() == "unknown");
+    delete testflower;
 }
 
 void testSageCondition() {
@@ -365,6 +325,7 @@ void testSageCondition() {
     testflower->water(wateramount);
     testflower->fertilize(fertamount);
     assert(testflower->checkcondition());
+    delete testflower;
 }
 
 void testSagePollination() {
@@ -373,12 +334,14 @@ void testSagePollination() {
     testflower->givepollen(pollinatorA);
     testflower->pollinate(pollinatorA);
     assert(testflower->Pollinated());
+    delete testflower;
 }
 void testSagePrune() {
     flower* testflower = new sage("purple");
     assert(!testflower->is_pruned());
     testflower->prune();
     assert(testflower->is_pruned());
+    delete testflower;
 }
 int main() {
     testPollinatorType();
