@@ -166,8 +166,6 @@ class flower{
         }
     };
 class daisy : public flower {
-        int fertneed=8;
-        int waterneed=10;
         public:
         daisy() {
         possiblecolors = {"white", "pink", "yellow", "red", "lavender", "purple"};
