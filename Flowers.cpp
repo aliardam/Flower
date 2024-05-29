@@ -16,11 +16,12 @@ string decapitalize(const string& str) {
     }
     return result;
 }
-//my base class
 class flower{
     protected:
     vector<string> possiblecolors;
     string color;
+    double pricepp;
+    int amount;
  
     public :
     void setcolor (string& colorname)
@@ -37,18 +38,57 @@ class flower{
         color = "unknown"; // set default color
     }
     string const getcolor() { return color;}
+    double const getprice(){
+    return amount * pricepp;
+}
     virtual ~flower() {}
     };
+class Bouquet {
+protected:
+    vector<flower*> _flowers;
+    vector<decoration*> _decorations;
+    double Price;
+public:
+double const getFullPrice (){
+    double flowersum;
+    double decsum;
+    for (flower* flower : _flowers) {
+        flowersum+=flower->getprice();
+        }
+        for (decoration* dec : _decorations){
+            decsum+=dec->getprice();
+        }
+        return flowersum+decsum;
+}
+    virtual Bouquet* makeBouquet() = 0;
+    virtual ~Bouquet() {
+        for (flower* flower : _flowers) {
+            delete flower;
+        }
+        for (decoration* dec : _decorations){
+            delete dec;
+        }
+    }
+};
+class decoration {
+protected:
+int amount;
+int amountlimit;
+double pricepp; //price per piece
 
- class rose : public flower {
-        public:
-        rose() {
-        possiblecolors = {"red", "pink", "white","yellow","orange","peach","purple"};    };
-        rose(string _color){
-             possiblecolors = {"red", "pink", "white","yellow","orange","peach","purple"};
-            setcolor(_color);
-            }; 
-    };
+public:
+void setamnt(int amnt){
+    if (amountlimit>=amnt && amnt>0){
+        amount=amnt;
+    }
+    else
+    throw invalid_argument("invalid number of decorations");
+}
+int const getamnt(){return amount;}
+double const getprice(){
+    return amount * pricepp;
+}
+};
 class daisy : public flower {
         public:
         daisy() {
@@ -69,7 +109,15 @@ class sage : public flower {
         setcolor(_color);
     }
 };
-
+ class rose : public flower {
+        public:
+        rose() {
+        possiblecolors = {"red", "pink", "white","yellow","orange","peach","purple"};    };
+        rose(string _color){
+             possiblecolors = {"red", "pink", "white","yellow","orange","peach","purple"};
+            setcolor(_color);
+            }; 
+    };
 // my humble tests
 void testRoseColor() {
     flower* testflower = new rose("Red");
