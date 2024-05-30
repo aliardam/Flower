@@ -96,6 +96,42 @@ double const getprice(){
     return amount * pricepp;
 }
 };
+class driedleaves : public decoration {
+    string color="white";
+    vector<string> possiblecolors= {"green","brown","orange","red","yellow"};
+    public:
+    driedleaves()
+    {
+        amountlimit=5;
+        pricepp=0.5;
+    }
+    driedleaves(string _color)
+    {
+        amountlimit=5;
+        pricepp=0.5;
+        setcolor(_color);
+    }
+        driedleaves(string _color,int am)
+    {
+        amountlimit=5;
+        pricepp=0.5;
+        setcolor(_color);
+        setamnt(am);
+    }
+    void setcolor (string& colorname)
+    {
+        string colorname_;
+        colorname_ = decapitalize(colorname);
+        for (int i=0;i<possiblecolors.size();i +=1){
+            if (colorname_ == possiblecolors[i]) {
+            color = colorname_;
+            return;
+        }
+        }
+         cout << "input invalid, or the color is not currantly available in our shop " << endl;
+    }
+    string const getcolor(){return color;}
+};
 class ribbon : public decoration {
     string color="white";
     vector<string> possiblecolors= {"white","black","green","blue","red","yellow","gray","orange","pink"};
@@ -204,7 +240,7 @@ class sunflower : public flower {
         setamount(_am);
     }
 };
- class rose : public flower {
+class rose : public flower {
         public:
         
         rose() {
@@ -215,14 +251,33 @@ class sunflower : public flower {
             pricepp=3.75;
              possiblecolors = {"red", "pink", "white","yellow","orange","peach","purple"};
             setcolor(_color);
-            }; 
+        }
        rose(string _color,int _am){
         pricepp=3.75;
              possiblecolors = {"red", "pink", "white","yellow","orange","peach","purple"};
             setcolor(_color);
             setamount(_am);
-            };
+        }
     };
+class Tulips : public flower {
+public:
+    Tulips() {
+        pricepp = 2.00; // Price per piece
+        possiblecolors = {"red", "yellow", "pink", "white", "purple"};
+    }
+    Tulips(string _color) {
+        pricepp = 2.00;
+        possiblecolors = {"red", "yellow", "pink", "white", "purple"};
+        setcolor(_color);
+    }
+    Tulips(string _color, int _am) {
+        pricepp = 2.00;
+        possiblecolors = {"red", "yellow", "pink", "white", "purple"};
+        setcolor(_color);
+        setamount(_am);
+    }
+};
+
 // my humble tests
 void testRoseColor() {
     flower* testflower = new rose("Red");
