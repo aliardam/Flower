@@ -277,6 +277,63 @@ public:
         setamount(_am);
     }
 };
+class FuneralBouquet : public Bouquet {
+public:
+    FuneralBouquet* makeBouquet() override {
+        _flowers.push_back(new rose("white", 3));
+        _flowers.push_back(new Tulips("white", 2));
+        _decorations.push_back(new ribbon("black", 1));
+        _decorations.push_back(new Wrappingpaper("gray", 1));
+        return this;
+    }
+};
+
+class WeddingBouquet : public Bouquet {
+public:
+    WeddingBouquet* makeBouquet() override {
+        _flowers.push_back(new rose("white", 4));
+        _flowers.push_back(new daisy("pink", 3));
+        _flowers.push_back(new sunflower("yellow", 2));
+        _decorations.push_back(new ribbon("white", 2));
+        _decorations.push_back(new driedleaves("green", 3));
+        return this;
+    }
+};
+
+class ValentineBouquet : public Bouquet {
+public:
+    ValentineBouquet* makeBouquet() override {
+        _flowers.push_back(new rose("red", 6));
+        _flowers.push_back(new Tulips("red", 4));
+        _decorations.push_back(new ribbon("red", 1));
+        _decorations.push_back(new Wrappingpaper("white", 1));
+        return this;
+    }
+};
+
+class DateBouquet : public Bouquet {
+public:
+    DateBouquet* makeBouquet() override {
+        _flowers.push_back(new rose("pink", 3));
+        _flowers.push_back(new daisy("white", 2));
+        _flowers.push_back(new sunflower("orange", 1));
+        _decorations.push_back(new ribbon("pink", 1));
+        _decorations.push_back(new driedleaves("brown", 2));
+        return this;
+    }
+};
+
+class HospitalBouquet : public Bouquet {
+public:
+    HospitalBouquet* makeBouquet() override {
+        _flowers.push_back(new rose("yellow", 3));
+        _flowers.push_back(new daisy("lavender", 2));
+        _flowers.push_back(new Tulips("purple", 2));
+        _decorations.push_back(new ribbon("green", 1));
+        _decorations.push_back(new Wrappingpaper("blue", 1));
+        return this;
+    }
+};
 
 // my humble tests
 void testRoseColor() {
