@@ -51,6 +51,24 @@ void setamount(int _am){
 }
     virtual ~flower() {}
     };
+    class decoration {
+protected:
+int amount=1;
+int amountlimit;
+double pricepp; //price per piece
+public:
+void setamnt(int amnt){
+    if (amountlimit>=amnt && amnt>0){
+        amount=amnt;
+    }
+    else
+    throw invalid_argument("invalid number of decorations");
+}
+int const getamnt(){return amount;}
+double const getprice(){
+    return amount * pricepp;
+}
+};
 class Bouquet {
 protected:
     vector<flower*> _flowers;
@@ -77,24 +95,6 @@ double const getFullPrice (){
             delete dec;
         }
     }
-};
-class decoration {
-protected:
-int amount=1;
-int amountlimit;
-double pricepp; //price per piece
-public:
-void setamnt(int amnt){
-    if (amountlimit>=amnt && amnt>0){
-        amount=amnt;
-    }
-    else
-    throw invalid_argument("invalid number of decorations");
-}
-int const getamnt(){return amount;}
-double const getprice(){
-    return amount * pricepp;
-}
 };
 class driedleaves : public decoration {
     string color="white";
@@ -352,8 +352,48 @@ void testDaisyColor() {
     delete testflower;
 }
 
+void testFuneralBouquet() {
+    Bouquet* bouquet = new FuneralBouquet();
+    bouquet = bouquet->makeBouquet();
+    assert(bouquet->getFullPrice() == 16.5);
+    delete bouquet;
+}
+
+void testWeddingBouquet() {
+    Bouquet* bouquet = new WeddingBouquet();
+    bouquet = bouquet->makeBouquet();
+    assert(bouquet->getFullPrice() == 27.5);
+    delete bouquet;
+}
+
+void testValentineBouquet() {
+    Bouquet* bouquet = new ValentineBouquet();
+    bouquet = bouquet->makeBouquet();
+    assert(bouquet->getFullPrice() ==31.75);
+    delete bouquet;
+}
+
+void testDateBouquet() {
+    Bouquet* bouquet = new DateBouquet();
+    bouquet = bouquet->makeBouquet();
+    assert(bouquet->getFullPrice() == 18.5);
+    delete bouquet;
+}
+
+void testHospitalBouquet() {
+    Bouquet* bouquet = new HospitalBouquet();
+    bouquet = bouquet->makeBouquet();
+    assert(bouquet->getFullPrice() == 19.5);
+    delete bouquet;
+}
+
 int main() {
     testRoseColor();
     testDaisyColor();
+    testFuneralBouquet();
+    testWeddingBouquet();
+    testValentineBouquet();
+    testDateBouquet();
+    testHospitalBouquet();
     return 0;
 }
