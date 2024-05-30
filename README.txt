@@ -1,4 +1,4 @@
-I'm making a Flower Maintenance System simulation 
-it basically lets the user simulate watering fertilizing and pruning some flowers, check if they have been maintained well based on what the user has done
-Let the user choose a fixed amount of water and fertilizer that they can run out of, and if the user doesn't have any more of them then they cant water or fertilize their 
-flowers which each of them needs a different amount of water and fertilizer, and also each needs different things to be done with them so they stay well maintained.
+my code is basically a flower shop where you can buy different types of bouquets 
+ive made it so creating a new bouquet with different flowers and decorations is easy 
+in each bouquet the flowers are stored in a vector of flower pointers and the decorations in a vector of decoration pointers
+and the rest is obvious its a really simple code.
